@@ -10,11 +10,13 @@ import {
     NavbarBrand,
     NavbarText,
     NavbarToggler,
+    NavLink,
     UncontrolledDropdown
 } from 'reactstrap';
 import {Auth, Permissions, Roles} from "../auth/index";
 import Item from "./Item";
 import PropTypes from "prop-types";
+import {NavLink as RouterNavLink} from "react-router-dom";
 
 const CustomNavbar = ({onLogout, register}) => {
     const [isOpen, setIsOpen] = useState(false);
@@ -38,7 +40,7 @@ const CustomNavbar = ({onLogout, register}) => {
                         <Item href="/rules/new" name="New Rule" disabled={!Auth.hasPermission(Permissions.CREATE)}/>
                         {
                             (Auth.is(Roles.ADMIN) || true) && (
-                                <UncontrolledDropdown nav inNavbar disabled={!Auth.is(Roles.ADMIN)}>
+                                <UncontrolledDropdown nav inNavbar disabled={Auth.is(Roles.ADMIN)}>
                                     <DropdownToggle nav caret>
                                         Admin
                                     </DropdownToggle>
@@ -50,9 +52,14 @@ const CustomNavbar = ({onLogout, register}) => {
                                         <DropdownItem>
                                             Roles
                                         </DropdownItem>
-                                        <DropdownItem>
-                                            Permissions
-                                        </DropdownItem>
+                                        <NavLink tag={RouterNavLink}
+                                                 to="/permissions"
+                                                 exact
+                                                 activeClassName="active">
+                                            <DropdownItem>
+                                                Permissions
+                                            </DropdownItem>
+                                        </NavLink>
                                     </DropdownMenu>
                                 </UncontrolledDropdown>
                             )
@@ -61,11 +68,11 @@ const CustomNavbar = ({onLogout, register}) => {
                     <NavbarText>
                         {
                             Auth.isSignedIn() ? (<>
-                                <span className="text-success">{Auth.email()}</span>
+                                <span className="text-success mr-1">{Auth.email()}</span>
                                 <Button onClick={() => handleLogout()}>
                                     Log out
                                 </Button>
-                            </>) : <Button onClick={() => register()}>Register</Button>
+                            </>) : <Button size="sm" onClick={() => register()}>Register</Button>
                         }
                     </NavbarText>
                 </Collapse>

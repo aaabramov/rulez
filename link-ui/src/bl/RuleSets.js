@@ -18,8 +18,10 @@ const RuleSets = props => {
         setLoading(true);
 
         async function fetchData() {
-            const result = await axios('http://localhost:9000/api/v1/rules');
-            setRuleSets(result.data);
+            const data = await axios('http://localhost:9000/api/v1/rules')
+                .then(r => r.data)
+                .catch(e => setError(e));
+            setRuleSets(data);
             setLoading(false);
         }
 

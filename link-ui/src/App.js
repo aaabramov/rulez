@@ -12,6 +12,7 @@ const RuleSets = React.lazy(() => import('./bl/RuleSets'));
 const NewSecret = React.lazy(() => import('./links/NewSecret'));
 const Links = React.lazy(() => import('./links/Links'));
 const Login = React.lazy(() => import('./login/Login'));
+const Permissions = React.lazy(() => import('./components/permissions/Permissions'));
 
 const App = (props) => {
 
@@ -41,6 +42,7 @@ const App = (props) => {
                     <Route exact path="/secrets/new">
                         <NewSecret/>
                     </Route>
+                    <Route exact path="/permissions" component={Permissions}/>
                     <PrivateRoute path="/secrets"
                                   doRender={({history}) => <Links history={history}/>}/>
                     <Route path="/">
