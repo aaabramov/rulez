@@ -1,10 +1,11 @@
 package com.aaabramov.encoded.core.persistence.impl
 
+import cats.instances.future._
 import com.aaabramov.encoded.core.controller.{AuthorizedUser, Credentials}
-import com.aaabramov.encoded.core.entity.User
+import com.aaabramov.encoded.core.entity.{Role, User}
 import com.aaabramov.encoded.core.persistence.{Tables, liftAction}
 import com.aaabramov.encoded.core.util.error.{CustomError, ExceptionError}
-import com.aaabramov.encoded.core.util.flow.FlowF
+import com.aaabramov.encoded.core.util.flow.{Flow, FlowF}
 import com.github.t3hnar.bcrypt._
 import javax.inject.Inject
 import play.api.db.slick.{DatabaseConfigProvider, HasDatabaseConfigProvider}
@@ -66,6 +67,20 @@ class AuthRepositoryImpl @Inject()(override protected val dbConfigProvider: Data
         ))
     }
 
+  override def findDefault(): FlowF[Role] = {
+
+    val query =
+      roles
+        .filter(_.name === "default")
+        .result.headOption
+
+    liftAction(db run query)
+      .flatMap {
+        case Some(role) => Flow.pure(role)
+        case _          => Flow.leftT(CustomError.internal("Cannot file default role"))
+      }
+
+  }
 }
 
 

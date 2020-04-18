@@ -7,7 +7,7 @@
 GET           /                         controllers.HomeController.index
 POST          /api/v1/generate          controllers.ContentController.generate
 POST          /api/v1/signin            com.aaabramov.encoded.core.controller.AuthController.auth
-POST          /api/v1/signup            controllers.AuthController.signUp
+POST          /api/v1/signup            com.aaabramov.encoded.core.controller.AuthController.signUp
 GET           /api/v1/view/:uuid        controllers.ContentController.view(uuid: UUID)
 GET           /api/v1/secrets           controllers.ContentController.list(uuid: Option[String])
 

@@ -4,6 +4,7 @@ import java.time.Clock
 
 import cats.instances.future._
 import com.aaabramov.encoded.core.persistence.impl.AuthRepository
+import com.aaabramov.encoded.core.service.UserService
 import com.aaabramov.encoded.core.util.json.AnyAsJson
 import controllers.{JsonController, JsonErrorHandling}
 import javax.inject.Inject
@@ -22,6 +23,7 @@ object AuthResponse {
 }
 
 class AuthController @Inject()(
+                                userService: UserService,
                                 authRepository: AuthRepository
                               )(implicit ec: ExecutionContext, conf: Configuration, clock: Clock)
   extends JsonController
@@ -33,12 +35,24 @@ class AuthController @Inject()(
 
     authRepository
       .auth(credentials)
-      .map { x =>
+      .map { user =>
         Ok(
-          AuthResponse(ok = true, jwt = Some(JwtSession(x.asJsonObject).serialize))
+          AuthResponse(ok = true, jwt = Some(JwtSession(user.asJsonObject).serialize))
         )
       }
 
+  }
+
+  def signUp() = Action.async(parse.json[Credentials]) { implicit req =>
+    userService
+      .register(req.body)
+      .map { user =>
+        AuthResponse(ok = true, jwt = Some(JwtSession(user.asJsonObject).serialize))
+      }
+      .map(Ok(_))
+      .recover { case error =>
+        Status(error.httpCode)(AuthResponse(ok = false, error = Some(error.apiMessage)))
+      }
   }
 
 }

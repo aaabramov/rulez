@@ -1,6 +1,7 @@
 package com.aaabramov.encoded.core.util.error
 
 import com.aaabramov.encoded.core.util.json.AnyAsJson
+import play.api.http.Status
 import play.api.libs.json.{Json, OFormat}
 
 sealed trait CustomError {
@@ -27,6 +28,9 @@ object CustomError {
   private object FreeError {
     implicit val format: OFormat[FreeError] = Json.format[FreeError]
   }
+
+  def internal(internalMessage: String): CustomError =
+    FreeError("Internal error occurred", internalMessage, Status.INTERNAL_SERVER_ERROR)
 
   def free(apiMessage: String, internalMessage: String, httpCode: Int): CustomError =
     FreeError(apiMessage, internalMessage, httpCode)
