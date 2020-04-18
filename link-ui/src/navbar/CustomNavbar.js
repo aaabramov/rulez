@@ -10,36 +10,20 @@ import {
     NavbarBrand,
     NavbarText,
     NavbarToggler,
-    NavItem,
-    NavLink,
     UncontrolledDropdown
 } from 'reactstrap';
-import PropTypes from 'prop-types';
-import {Auth} from "../auth/index";
-import {NavLink as RouterNavLink} from "react-router-dom";
+import {Auth, Permissions} from "../auth/index";
+import Item from "./Item";
+import PropTypes from "prop-types";
 
-
-const Item = (props) => {
-    return (
-        <NavItem>
-            <NavLink tag={RouterNavLink} to={props.href} exact activeClassName="active">{props.name}</NavLink>
-        </NavItem>
-    );
-};
-
-Item.propTypes = {
-    href: PropTypes.string.isRequired,
-    name: PropTypes.string.isRequired
-};
-
-const CustomNavbar = (props) => {
+const CustomNavbar = ({onLogout, register}) => {
     const [isOpen, setIsOpen] = useState(false);
 
     const toggle = () => setIsOpen(!isOpen);
 
     const handleLogout = () => {
         Auth.logout();
-        props.onLogout();
+        onLogout();
     };
 
     return (
@@ -49,9 +33,9 @@ const CustomNavbar = (props) => {
                 <NavbarToggler onClick={toggle}/>
                 <Collapse isOpen={isOpen} navbar>
                     <Nav className="mr-auto" navbar>
-                        <Item href="/secrets" name="Secrets"/>
-                        <Item href="/rules" name="Rules"/>
-                        <Item href="/rules/new" name="New Rule"/>
+                        <Item href="/secrets" name="Secrets" disabled={!Auth.hasPermission(Permissions.VIEW)}/>
+                        <Item href="/rules" name="Rules" disabled={!Auth.hasPermission(Permissions.VIEW)}/>
+                        <Item href="/rules/new" name="New Rule" disabled={!Auth.hasPermission(Permissions.CREATE)}/>
                         <UncontrolledDropdown nav inNavbar>
                             <DropdownToggle nav caret>
                                 Options
@@ -74,13 +58,18 @@ const CustomNavbar = (props) => {
                         {
                             Auth.isSignedIn() ? <><span className="text-success">{Auth.email()}</span> <Button
                                     onClick={() => handleLogout()}>Log out</Button></> :
-                                <Button onClick={() => props.register()}>Register</Button>
+                                <Button onClick={() => register()}>Register</Button>
                         }
                     </NavbarText>
                 </Collapse>
             </Navbar>
         </div>
     );
+};
+
+CustomNavbar.propTypes = {
+    onLogout: PropTypes.func.isRequired,
+    register: PropTypes.func.isRequired
 };
 
 export default CustomNavbar;
