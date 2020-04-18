@@ -50,18 +50,18 @@ class AuthRepositoryImpl @Inject()(override protected val dbConfigProvider: Data
         else
           DBIO.failed(ExceptionError(
             CustomError.free(
-              _apiMessage = "Wrong email or password",
-              _internalMessage = "Invalid password",
-              _httpCode = 401
+              apiMessage = "Wrong email or password",
+              internalMessage = "Invalid password",
+              httpCode = 401
             )
           ))
 
       case None =>
         DBIO.failed(ExceptionError(
           CustomError.free(
-            _apiMessage = "Wrong email or password",
-            _internalMessage = s"User with email=${credentials.email} does not exit",
-            _httpCode = 401
+            apiMessage = "Wrong email or password",
+            internalMessage = s"User with email=${credentials.email} does not exit",
+            httpCode = 401
           )
         ))
     }

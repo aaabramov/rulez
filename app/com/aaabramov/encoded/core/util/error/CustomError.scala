@@ -1,5 +1,8 @@
 package com.aaabramov.encoded.core.util.error
 
+import com.aaabramov.encoded.core.util.json.AnyAsJson
+import play.api.libs.json.{Json, OFormat}
+
 sealed trait CustomError {
   def apiMessage: String
 
@@ -12,15 +15,21 @@ sealed trait CustomError {
 
 object CustomError {
 
-  def free(_apiMessage: String, _internalMessage: String, _httpCode: Int): CustomError = new CustomError {
-    override def apiMessage: String = _apiMessage
-
-    override def internalMessage: String = _internalMessage
-
-    override def httpCode: Int = _httpCode
-
+  private case class FreeError(
+                                apiMessage: String,
+                                internalMessage: String,
+                                httpCode: Int) extends CustomError {
     override def exception: Option[Throwable] = None
+
+    override def toString: String = this.asJsonString
   }
+
+  private object FreeError {
+    implicit val format: OFormat[FreeError] = Json.format[FreeError]
+  }
+
+  def free(apiMessage: String, internalMessage: String, httpCode: Int): CustomError =
+    FreeError(apiMessage, internalMessage, httpCode)
 
   def entityNotFound(entity: String, id: String): CustomError =
     InternalError(
