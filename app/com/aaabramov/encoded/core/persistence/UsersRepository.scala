@@ -5,6 +5,7 @@ import java.util.UUID
 import cats.instances.future._
 import cats.instances.uuid
 import com.aaabramov.encoded.core.entity.User
+import com.aaabramov.encoded.core.module.Now
 import com.aaabramov.encoded.core.util.Mutation
 import com.aaabramov.encoded.core.util.error.{CustomError, ExceptionError}
 import com.aaabramov.encoded.core.util.flow.FlowF
@@ -15,7 +16,10 @@ import slick.jdbc.PostgresProfile
 
 import scala.concurrent.ExecutionContext
 
-class UsersRepository @Inject()(override protected val dbConfigProvider: DatabaseConfigProvider)
+class UsersRepository @Inject()(
+                                 override protected val dbConfigProvider: DatabaseConfigProvider,
+                                 now: Now
+                               )
                                (implicit ec: ExecutionContext)
   extends HasDatabaseConfigProvider[PostgresProfile]
   with Tables {
@@ -61,10 +65,10 @@ class UsersRepository @Inject()(override protected val dbConfigProvider: Databas
       maybeOne <- users.filter(_.uuid === uuid).result.headOption
       action <- maybeOne match {
         case Some(found) =>
-          val updated = mutation(found)
+          val updated = mutation(found).copy(updatedAt = now())
           users
             .filter(_.uuid === uuid)
-            .update(mutation(found))
+            .update(updated)
             .map(_ => updated)
         case _           => DBIO.failed(ExceptionError(CustomError.entityNotFound("User", uuid.toString)))
       }

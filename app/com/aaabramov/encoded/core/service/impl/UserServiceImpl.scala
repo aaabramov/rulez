@@ -37,7 +37,7 @@ class UserServiceImpl @Inject()(
               val time = now()
               userRepo.insert(User(
                 UUID.randomUUID(),
-                credentials.email,
+                credentials.email.toLowerCase,
                 credentials.password.bcrypt,
                 roleId,
                 time,

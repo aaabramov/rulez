@@ -12,9 +12,10 @@ case class User(
                  uuid: UUID,
                  email: String,
                  password: String,
-                 roleId: Long,
+                 roleId: Int,
                  createdAt: LocalDateTime,
                  updatedAt: LocalDateTime,
+                 active: Boolean = true,
                  id: Int = 0
                ) {
 

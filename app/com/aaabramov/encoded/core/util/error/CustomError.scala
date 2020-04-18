@@ -29,8 +29,11 @@ object CustomError {
     implicit val format: OFormat[FreeError] = Json.format[FreeError]
   }
 
-  def internal(internalMessage: String): CustomError =
-    FreeError("Internal error occurred", internalMessage, Status.INTERNAL_SERVER_ERROR)
+  def internal(internalMessage: String, apiMessage: String = "Internal error occurred"): CustomError =
+    FreeError(apiMessage, internalMessage, Status.INTERNAL_SERVER_ERROR)
+
+  def internal(apiMessage: ApiMessage): CustomError =
+    FreeError(apiMessage.msg, apiMessage.msg, Status.INTERNAL_SERVER_ERROR)
 
   def free(apiMessage: String, internalMessage: String, httpCode: Int): CustomError =
     FreeError(apiMessage, internalMessage, httpCode)

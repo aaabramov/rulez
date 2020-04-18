@@ -55,7 +55,7 @@ object BlTables {
   }
 
   class RolesTable(tag: Tag) extends Table[Role](tag, "roles") {
-    def id = column[Long]("id", O.PrimaryKey, O.AutoInc)
+    def id = column[Int]("id", O.PrimaryKey, O.AutoInc)
 
     def name = column[String]("name")
 
@@ -63,17 +63,21 @@ object BlTables {
   }
 
   class PermissionsTable(tag: Tag) extends Table[Permission](tag, "permissions") {
-    def id = column[Long]("id", O.PrimaryKey, O.AutoInc)
+    def id = column[Int]("id", O.PrimaryKey, O.AutoInc)
 
     def name = column[String]("name")
 
-    override def * = (name, id).mapTo[Permission]
+    def createdAt = column[LocalDateTime]("created_at")
+
+    def updatedAt = column[LocalDateTime]("updated_at")
+
+    override def * = (name, createdAt, updatedAt, id).mapTo[Permission]
   }
 
   class RolePermissionsTable(tag: Tag) extends Table[RolePermission](tag, "role_permissions") {
-    def roleId = column[Long]("role_id")
+    def roleId = column[Int]("role_id")
 
-    def permissionId = column[Long]("permission_id")
+    def permissionId = column[Int]("permission_id")
 
     def pk = primaryKey("", (roleId, permissionId))
 

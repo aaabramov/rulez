@@ -31,7 +31,7 @@ class AuthRepositoryImpl @Inject()(override protected val dbConfigProvider: Data
                        .result
         .headOption
       user        <- validateUser(maybeUser, credentials)
-      role        <- roles.filter(_.id === user.roleId).result.head // TODO
+      role        <- roles.filter(_.id === user.roleId).result.head
       permissions <- rolePermissions
                        .filter(_.roleId === role.id)
                        .join(permissions).on(_.permissionId === _.id)
@@ -46,7 +46,15 @@ class AuthRepositoryImpl @Inject()(override protected val dbConfigProvider: Data
   private def validateUser(maybeUser: Option[User], credentials: Credentials) =
     maybeUser match {
       case Some(user) =>
-        if (credentials.password.isBcrypted(user.password))
+        if (!user.active)
+          DBIO.failed(ExceptionError(
+            CustomError.free(
+              apiMessage = "Wrong email or password",
+              internalMessage = "Use has been disabled",
+              httpCode = 401
+            )
+          ))
+        else if (credentials.password.isBcrypted(user.password))
           DBIO.successful(user)
         else
           DBIO.failed(ExceptionError(
