@@ -1,0 +1,24 @@
+- API генерация ссылки (context type txt просто в <p>)
+- Ссылку можно открыть только один раз, открыли ~> expired
+- фиксировать с какого айпи открыли
+- указывать с какого IP можно открыть ссылку
+- динамические домент
+- указывать content type
+- делать красиво в зависимости от content type
+- авторизация через гугл
+- нужна авторизация для просмотра ссылки
+- копировать то, что в текстовом поле
+- one time redirect
+- one time file share
+- secret types: key-value, html, json, xml, image, video
+
+Blacklists:
+- add Redis for auth & jwt
+- withPermission (FlowF)
+
+- https://react-icons.netlify.com/#/icons/fa
+- https://www.robinwieruch.de/react-hooks-fetch-data
+- https://github.com/t3hnar/scala-bcrypt
+- https://reactstrap.github.io/components/form/
+- https://powerspace.tech/using-slick-in-production-dbfcbe29545c [Must read!]
+- d
