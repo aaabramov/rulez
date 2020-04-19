@@ -49,9 +49,14 @@ const CustomNavbar = ({onLogout, register}) => {
                                             Users
                                         </DropdownItem>
                                         <DropdownItem divider/>
-                                        <DropdownItem>
-                                            Roles
-                                        </DropdownItem>
+                                        <NavLink tag={RouterNavLink}
+                                                 to="/roles"
+                                                 exact
+                                                 activeClassName="active">
+                                            <DropdownItem>
+                                                Roles
+                                            </DropdownItem>
+                                        </NavLink>
                                         <NavLink tag={RouterNavLink}
                                                  to="/permissions"
                                                  exact

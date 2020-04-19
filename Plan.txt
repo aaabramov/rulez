@@ -11,6 +11,7 @@
 - one time redirect
 - one time file share
 - secret types: key-value, html, json, xml, image, video
+- delay search: https://stackoverflow.com/a/55092957/5091346
 
 Blacklists:
 - add Redis for auth & jwt

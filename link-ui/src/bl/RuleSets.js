@@ -4,9 +4,9 @@ import axios from 'axios';
 import {FaPlusSquare} from "react-icons/all";
 import {Link} from "react-router-dom";
 import Loading from "../components/util/Loading";
-import Moment from 'react-moment';
 import RemoveRuleSetButton from "./RemoveRuleSetButton";
 import {Auth, Permissions} from "../auth";
+import DateTime from "../components/datetime/DateTime";
 
 const RuleSets = props => {
     const {history} = props;
@@ -64,7 +64,7 @@ const RuleSets = props => {
                         <td>{rs.rules.length}</td>
                         <td>{rs.conditions.length}</td>
                         <td>
-                            <Moment date={new Date(rs.ruleSet.updatedAt)} format="DD/MM/YYYY HH:mm"/>
+                            <DateTime date={new Date(rs.ruleSet.updatedAt)}/>
                         </td>
                         <td>
                             <RemoveRuleSetButton idx={i}

@@ -6,8 +6,10 @@ import play.api.libs.json.{Json, OFormat}
 
 case class Permission(
                        name: String,
+                       description: String,
                        createdAt: LocalDateTime,
                        updatedAt: LocalDateTime,
+                       active: Boolean = true,
                        id: Int = 0
                      )
 

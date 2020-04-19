@@ -3,7 +3,7 @@ import './App.css';
 import CustomNavbar from "./navbar/CustomNavbar";
 import {Container} from "reactstrap";
 import {Auth} from "./auth/index";
-import {Redirect, Route, Router, Switch, useHistory} from "react-router-dom";
+import {Redirect, Route, Switch, useHistory} from "react-router-dom";
 
 const NewRuleConfig = React.lazy(() => import('./bl/NewRuleConfig'));
 const EditRuleConfig = React.lazy(() => import('./bl/EditRuleConfig'));
@@ -13,6 +13,10 @@ const NewSecret = React.lazy(() => import('./links/NewSecret'));
 const Links = React.lazy(() => import('./links/Links'));
 const Login = React.lazy(() => import('./login/Login'));
 const Permissions = React.lazy(() => import('./components/permissions/Permissions'));
+const ViewPermission = React.lazy(() => import('./components/permissions/ViewPermission'));
+const Roles = React.lazy(() => import('./components/roles/Roles'));
+const ViewRole = React.lazy(() => import('./components/roles/ViewRole'));
+const EditRole = React.lazy(() => import('./components/roles/EditRole'));
 
 const App = (props) => {
 
@@ -42,7 +46,11 @@ const App = (props) => {
                     <Route exact path="/secrets/new">
                         <NewSecret/>
                     </Route>
+                    <Route path="/permissions/:permissionId([0-9]+)" component={ViewPermission}/>
                     <Route exact path="/permissions" component={Permissions}/>
+                    <Route path="/roles/:roleId([0-9]+)/edit" component={EditRole}/>
+                    <Route exact path="/roles/:roleId([0-9]+)" component={ViewRole}/>
+                    <Route exact path="/roles" component={Roles}/>
                     <PrivateRoute path="/secrets"
                                   doRender={({history}) => <Links history={history}/>}/>
                     <Route path="/">

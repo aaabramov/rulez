@@ -58,20 +58,30 @@ object BlTables {
     def id = column[Int]("id", O.PrimaryKey, O.AutoInc)
 
     def name = column[String]("name")
-
-    override def * = (name, id).mapTo[Role]
-  }
-
-  class PermissionsTable(tag: Tag) extends Table[Permission](tag, "permissions") {
-    def id = column[Int]("id", O.PrimaryKey, O.AutoInc)
-
-    def name = column[String]("name")
+    def description = column[String]("description", O.Unique)
 
     def createdAt = column[LocalDateTime]("created_at")
 
     def updatedAt = column[LocalDateTime]("updated_at")
 
-    override def * = (name, createdAt, updatedAt, id).mapTo[Permission]
+    def active = column[Boolean]("active")
+
+    override def * = (name, description, createdAt, updatedAt, active, id).mapTo[Role]
+  }
+
+  class PermissionsTable(tag: Tag) extends Table[Permission](tag, "permissions") {
+    def id = column[Int]("id", O.PrimaryKey, O.AutoInc)
+
+    def name = column[String]("name", O.Unique)
+    def description = column[String]("description", O.Unique)
+
+    def createdAt = column[LocalDateTime]("created_at")
+
+    def updatedAt = column[LocalDateTime]("updated_at")
+
+    def active = column[Boolean]("active")
+
+    override def * = (name, description, createdAt, updatedAt, active, id).mapTo[Permission]
   }
 
   class RolePermissionsTable(tag: Tag) extends Table[RolePermission](tag, "role_permissions") {

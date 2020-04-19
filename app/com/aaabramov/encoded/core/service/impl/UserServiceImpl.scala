@@ -33,13 +33,13 @@ class UserServiceImpl @Inject()(
         case Nil =>
           authRepo
             .findDefault()
-            .flatMap { case Role(_, roleId) =>
+            .flatMap { role =>
               val time = now()
               userRepo.insert(User(
                 UUID.randomUUID(),
                 credentials.email.toLowerCase,
                 credentials.password.bcrypt,
-                roleId,
+                role.id,
                 time,
                 time
               ))

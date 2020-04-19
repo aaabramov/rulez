@@ -4,9 +4,7 @@ import java.time.LocalDateTime
 import java.util.UUID
 
 import com.aaabramov.encoded.core.util.json.AnyAsJson
-import play.api.libs.json.JsonConfiguration.Aux
-import play.api.libs.json.JsonNaming.SnakeCase
-import play.api.libs.json.{Json, JsonConfiguration, OFormat}
+import play.api.libs.json.{Json, OWrites}
 
 case class User(
                  uuid: UUID,
@@ -20,13 +18,14 @@ case class User(
                ) {
 
   override def toString: String =
-    copy(password = "***").asJsonString
+    copy(password = "***").asJsonString(User.writesAll)
 
 }
 
 object User {
-  private implicit val config: Aux[Json.MacroOptions] = JsonConfiguration(SnakeCase)
-  implicit val format: OFormat[User] = Json.format[User]
+  private val writesAll: OWrites[User] = Json.writes[User]
+
+  implicit val format: OWrites[User] = writesAll.writes(_) - "password"
 
   val tupled = (this.apply _).tupled
 }

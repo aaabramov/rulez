@@ -27,16 +27,16 @@ class AuthRepositoryImpl @Inject()(override protected val dbConfigProvider: Data
     val query = for {
       //@formatter:off
       maybeUser   <- users
-                       .filter(_.email === credentials.email.toLowerCase)
-                       .result
-        .headOption
+        .filter(_.email === credentials.email.toLowerCase)
+        .result.headOption
       user        <- validateUser(maybeUser, credentials)
       role        <- roles.filter(_.id === user.roleId).result.head
       permissions <- rolePermissions
-                       .filter(_.roleId === role.id)
-                       .join(permissions).on(_.permissionId === _.id)
-                       .result
-                       .map(_.map { case (_, p) => p })
+        .filter(_.roleId === role.id)
+        .join(permissions).on(_.permissionId === _.id)
+        .filter { case (_, p) => p.active }
+        .result
+        .map(_.map { case (_, p) => p })
       //@formatter:on
     } yield AuthorizedUser(user.email, role.name, permissions.map(_.name).toSet)
 
@@ -89,6 +89,30 @@ class AuthRepositoryImpl @Inject()(override protected val dbConfigProvider: Data
       }
 
   }
+
+
+  override def findUsersWithRole(id: Int): FlowF[(Role, List[User])] = {
+
+    val query = for {
+      role <- roles.filter(_.id === id).result.head
+      users <- users.filter(_.roleId === id).result
+    } yield (role, users.toList)
+
+    liftAction(db run query)
+  }
+
+  override def findUsersWithPermission(id: Int): FlowF[List[(User, Role)]] = {
+
+    val query = rolePermissions
+      .filter(_.permissionId === id)
+      .join(roles).on(_.roleId === _.id)
+      .join(users).on { case ((_, r), u) => u.roleId === r.id }
+      .map { case ((_, r), u) => (u, r) }
+
+    liftAction(db run query.result)
+      .map(_.toList)
+  }
+
 }
 
 
