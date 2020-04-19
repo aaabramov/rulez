@@ -35,13 +35,15 @@ trait Tables { this: HasDatabaseConfigProvider[PostgresProfile] =>
 
     def email = column[String]("email", O.Unique)
 
-    def roleId = column[Long]("role_id")
+    def roleId = column[Int]("role_id")
 
     def password = column[String]("password")
 
     def createdAt = column[LocalDateTime]("created_at")
 
     def updatedAt = column[LocalDateTime]("updated_at")
+
+    def active = column[Boolean]("active")
 
     def id = column[Int]("id", O.PrimaryKey, O.AutoInc)
 
@@ -52,6 +54,7 @@ trait Tables { this: HasDatabaseConfigProvider[PostgresProfile] =>
       roleId,
       createdAt,
       updatedAt,
+      active,
       id
       ).mapTo[User]
   }

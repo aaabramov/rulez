@@ -1,7 +1,7 @@
 package com.aaabramov.encoded.core.entity.bl
 
 import cats.instances.future._
-import com.aaabramov.encoded.core.controller.{KeyValue, RuleSetRequest}
+import com.aaabramov.encoded.core.controller.dto.{KeyValue, RuleSetRequest}
 import com.aaabramov.encoded.core.entity.RuleSetEntity
 import com.aaabramov.encoded.core.entity.repo.BlRepo
 import com.aaabramov.encoded.core.module.Now

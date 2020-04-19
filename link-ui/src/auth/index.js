@@ -7,6 +7,10 @@ export const Permissions = {
     VIEW: 'view'
 };
 
+export const Roles = {
+    ADMIN: 'admin'
+};
+
 /*
 "auth": {
   "email": "1",
@@ -43,14 +47,21 @@ export const Auth = {
         if (Auth.isSignedIn())
             return new Set(Auth.jwt().permissions);
         else
-            return null;
+            return new Set();
     },
 
     hasPermission: (name) => {
         if (Auth.isSignedIn())
             return Auth.permissions().has(name);
         else
-            return null;
+            return false;
+    },
+
+    is: (role) => {
+        if (Auth.isSignedIn())
+            return Auth.jwt().role === role;
+        else
+            return false;
     },
 
     email: () => {

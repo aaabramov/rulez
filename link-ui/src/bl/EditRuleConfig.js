@@ -32,7 +32,7 @@ const EditRuleConfig = (props) => {
         };
 
         fetchData();
-    }, []);
+    }, [ruleId]);
 
     useEffect(() => {
         if (update) {

@@ -1,30 +1,14 @@
 package com.aaabramov.encoded.core.controller
 
 import cats.instances.future._
+import com.aaabramov.encoded.core.controller.dto.RuleSetRequest
 import com.aaabramov.encoded.core.entity.repo.BlRepo
 import controllers.{JsonController, JsonErrorHandling}
 import javax.inject.Inject
 import play.api.Logging
-import play.api.libs.json.{Json, OFormat}
+import play.api.libs.json.Json
 
 import scala.concurrent.ExecutionContext
-
-case class Entity(key: String, value: String)
-
-case class KeyValue(
-                     key: String,
-                     value: String
-                   )
-
-object KeyValue {
-  implicit val format: OFormat[KeyValue] = Json.format[KeyValue]
-}
-
-case class RuleSetRequest(name: String, author: String, rules: Set[KeyValue], conditions: Set[KeyValue])
-
-object RuleSetRequest {
-  implicit val format: OFormat[RuleSetRequest] = Json.format[RuleSetRequest]
-}
 
 class RuleSetController @Inject()(
                                    repo: BlRepo

@@ -5,11 +5,18 @@ import Error from "../../bl/Error";
 
 const Loading = ({loading, content, error}) => {
     return (
-        <>
+        <div>
             {
-                loading ? <Spinner/> : error ? <Error error={error}/> : content()
+                loading ? (
+                    <div className="text-center mt-3">
+                        <Spinner/>
+                    </div>
+                ) : (error ?
+                        <Error error={error}/> :
+                        content()
+                )
             }
-        </>
+        </div>
 
     );
 };

@@ -8,8 +8,8 @@ import Loading from "../components/util/Loading";
 import {Auth, Permissions} from "../auth";
 
 const RuleConfig = props => {
-    let history = useHistory();
-    let {ruleId} = useParams();
+    const history = useHistory();
+    const {ruleId} = useParams();
     const [ruleSet, setRuleSet] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);

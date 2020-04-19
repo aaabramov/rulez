@@ -1,6 +1,6 @@
 package com.aaabramov.encoded.core.entity.repo
 
-import com.aaabramov.encoded.core.controller.RuleSetRequest
+import com.aaabramov.encoded.core.controller.dto.RuleSetRequest
 import com.aaabramov.encoded.core.entity.RuleSetEntity
 import com.aaabramov.encoded.core.entity.bl.BlRepoImpl
 import com.aaabramov.encoded.core.util.flow.FlowF

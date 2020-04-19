@@ -10,36 +10,22 @@ import {
     NavbarBrand,
     NavbarText,
     NavbarToggler,
-    NavItem,
     NavLink,
     UncontrolledDropdown
 } from 'reactstrap';
-import PropTypes from 'prop-types';
-import {Auth} from "../auth/index";
+import {Auth, Permissions, Roles} from "../auth/index";
+import Item from "./Item";
+import PropTypes from "prop-types";
 import {NavLink as RouterNavLink} from "react-router-dom";
 
-
-const Item = (props) => {
-    return (
-        <NavItem>
-            <NavLink tag={RouterNavLink} to={props.href} exact activeClassName="active">{props.name}</NavLink>
-        </NavItem>
-    );
-};
-
-Item.propTypes = {
-    href: PropTypes.string.isRequired,
-    name: PropTypes.string.isRequired
-};
-
-const CustomNavbar = (props) => {
+const CustomNavbar = ({onLogout, register}) => {
     const [isOpen, setIsOpen] = useState(false);
 
     const toggle = () => setIsOpen(!isOpen);
 
     const handleLogout = () => {
         Auth.logout();
-        props.onLogout();
+        onLogout();
     };
 
     return (
@@ -49,38 +35,60 @@ const CustomNavbar = (props) => {
                 <NavbarToggler onClick={toggle}/>
                 <Collapse isOpen={isOpen} navbar>
                     <Nav className="mr-auto" navbar>
-                        <Item href="/secrets" name="Secrets"/>
-                        <Item href="/rules" name="Rules"/>
-                        <Item href="/rules/new" name="New Rule"/>
-                        <UncontrolledDropdown nav inNavbar>
-                            <DropdownToggle nav caret>
-                                Options
-                            </DropdownToggle>
-                            <DropdownMenu right>
-                                <DropdownItem>
-                                    Option 1
-                                </DropdownItem>
-                                <DropdownItem>
-                                    Option 2
-                                </DropdownItem>
-                                <DropdownItem divider/>
-                                <DropdownItem>
-                                    Reset
-                                </DropdownItem>
-                            </DropdownMenu>
-                        </UncontrolledDropdown>
+                        <Item href="/secrets" name="Secrets" disabled={!Auth.hasPermission(Permissions.VIEW)}/>
+                        <Item href="/rules" name="Rules" disabled={!Auth.hasPermission(Permissions.VIEW)}/>
+                        <Item href="/rules/new" name="New Rule" disabled={!Auth.hasPermission(Permissions.CREATE)}/>
+                        {
+                            (Auth.is(Roles.ADMIN) || true) && (
+                                <UncontrolledDropdown nav inNavbar disabled={Auth.is(Roles.ADMIN)}>
+                                    <DropdownToggle nav caret>
+                                        Admin
+                                    </DropdownToggle>
+                                    <DropdownMenu right>
+                                        <DropdownItem>
+                                            Users
+                                        </DropdownItem>
+                                        <DropdownItem divider/>
+                                        <NavLink tag={RouterNavLink}
+                                                 to="/roles"
+                                                 exact
+                                                 activeClassName="active">
+                                            <DropdownItem>
+                                                Roles
+                                            </DropdownItem>
+                                        </NavLink>
+                                        <NavLink tag={RouterNavLink}
+                                                 to="/permissions"
+                                                 exact
+                                                 activeClassName="active">
+                                            <DropdownItem>
+                                                Permissions
+                                            </DropdownItem>
+                                        </NavLink>
+                                    </DropdownMenu>
+                                </UncontrolledDropdown>
+                            )
+                        }
                     </Nav>
                     <NavbarText>
                         {
-                            Auth.isSignedIn() ? <><span className="text-success">{Auth.email()}</span> <Button
-                                    onClick={() => handleLogout()}>Log out</Button></> :
-                                <Button onClick={() => props.register()}>Register</Button>
+                            Auth.isSignedIn() ? (<>
+                                <span className="text-success mr-1">{Auth.email()}</span>
+                                <Button onClick={() => handleLogout()}>
+                                    Log out
+                                </Button>
+                            </>) : <Button size="sm" onClick={() => register()}>Register</Button>
                         }
                     </NavbarText>
                 </Collapse>
             </Navbar>
         </div>
     );
+};
+
+CustomNavbar.propTypes = {
+    onLogout: PropTypes.func.isRequired,
+    register: PropTypes.func.isRequired
 };
 
 export default CustomNavbar;

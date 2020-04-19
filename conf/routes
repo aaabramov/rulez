@@ -4,18 +4,36 @@
 # ~~~~
 
 # An example controller showing a sample home page
-GET           /                         controllers.HomeController.index
-POST          /api/v1/generate          controllers.ContentController.generate
-POST          /api/v1/signin            com.aaabramov.encoded.core.controller.AuthController.auth
-POST          /api/v1/signup            controllers.AuthController.signUp
-GET           /api/v1/view/:uuid        controllers.ContentController.view(uuid: UUID)
-GET           /api/v1/secrets           controllers.ContentController.list(uuid: Option[String])
+GET           /                                      controllers.HomeController.index
+POST          /api/v1/generate                       controllers.ContentController.generate
+POST          /api/v1/signin                         com.aaabramov.encoded.core.controller.AuthController.auth
+POST          /api/v1/signup                         com.aaabramov.encoded.core.controller.AuthController.signUp
+GET           /api/v1/view/:uuid                     controllers.ContentController.view(uuid: UUID)
+GET           /api/v1/secrets                        controllers.ContentController.list(uuid: Option[String])
 
-POST          /api/v1/rules             com.aaabramov.encoded.core.controller.RuleSetController.create
-GET           /api/v1/rules             com.aaabramov.encoded.core.controller.RuleSetController.list
-GET           /api/v1/rules/:id         com.aaabramov.encoded.core.controller.RuleSetController.findOne(id: Long)
-PUT           /api/v1/rules/:id         com.aaabramov.encoded.core.controller.RuleSetController.update(id: Long)
-DELETE        /api/v1/rules/:id         com.aaabramov.encoded.core.controller.RuleSetController.delete(id: Long)
+POST          /api/v1/rules                          com.aaabramov.encoded.core.controller.RuleSetController.create
+GET           /api/v1/rules                          com.aaabramov.encoded.core.controller.RuleSetController.list
+GET           /api/v1/rules/:id                      com.aaabramov.encoded.core.controller.RuleSetController.findOne(id: Long)
+PUT           /api/v1/rules/:id                      com.aaabramov.encoded.core.controller.RuleSetController.update(id: Long)
+DELETE        /api/v1/rules/:id                      com.aaabramov.encoded.core.controller.RuleSetController.delete(id: Long)
+
+GET           /api/v1/permissions                    com.aaabramov.encoded.core.controller.PermissionsController.list
+POST          /api/v1/permissions                    com.aaabramov.encoded.core.controller.PermissionsController.create
+GET           /api/v1/permissions/:id                com.aaabramov.encoded.core.controller.PermissionsController.findOne(id: Int)
+PUT           /api/v1/permissions/:id                com.aaabramov.encoded.core.controller.PermissionsController.update(id: Int)
+DELETE        /api/v1/permissions/:id                com.aaabramov.encoded.core.controller.PermissionsController.delete(id: Int)
+POST          /api/v1/permissions/:id/enable         com.aaabramov.encoded.core.controller.PermissionsController.enable(id: Int)
+POST          /api/v1/permissions/:id/disable        com.aaabramov.encoded.core.controller.PermissionsController.disable(id: Int)
+GET           /api/v1/permissions/:id/users          com.aaabramov.encoded.core.controller.PermissionsController.users(id: Int)
+
+GET           /api/v1/roles                          com.aaabramov.encoded.core.controller.RolesController.list
+POST          /api/v1/roles                          com.aaabramov.encoded.core.controller.RolesController.create
+GET           /api/v1/roles/:id                      com.aaabramov.encoded.core.controller.RolesController.findOne(id: Int)
+PUT           /api/v1/roles/:id                      com.aaabramov.encoded.core.controller.RolesController.update(id: Int)
+DELETE        /api/v1/roles/:id                      com.aaabramov.encoded.core.controller.RolesController.delete(id: Int)
+POST          /api/v1/roles/:id/enable               com.aaabramov.encoded.core.controller.RolesController.enable(id: Int)
+POST          /api/v1/roles/:id/disable              com.aaabramov.encoded.core.controller.RolesController.disable(id: Int)
+GET           /api/v1/roles/:id/users                com.aaabramov.encoded.core.controller.RolesController.users(id: Int)
 
 # Map static resources from the /public folder to the /assets URL path
-GET           /assets/*file             controllers.Assets.versioned(path="/public", file: Asset)
+GET           /assets/*file                          controllers.Assets.versioned(path="/public", file: Asset)
